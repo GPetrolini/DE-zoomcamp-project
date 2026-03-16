@@ -3,11 +3,14 @@ from airflow import DAG
 from airflow.decorators import task
 from airflow.providers.google.cloud.operators.gcs import GCSCreateBucketOperator
 from airflow.providers.google.cloud.transfers.local_to_gcs import LocalFilesystemToGCSOperator
+from airflow.providers.google.cloud.operators.bigquery import BigQueryCreateExternalTableOperator
 import pendulum
 
 KAGGLE_DATASET = "gregorut/videogamesales"
 DATA_DIR = "/opt/airflow/data"
 BUCKET_NAME = "dtc-de-course-bucket-gustavo-2026"
+PROJECT_ID = "de-zoomcamp-484312"
+DATASET_ID = "video_game_data"
 
 default_args = {
     "owner": "gustavo",
@@ -43,4 +46,22 @@ with DAG(
         gcp_conn_id="google_cloud_default"
     )
 
-    download_kaggle_data() >> upload_to_gcs
+    create_external_table = BigQueryCreateExternalTableOperator(
+        task_id="create_external_table",
+        table_resource={
+            "tableReference": {
+                "projectId": PROJECT_ID,
+                "datasetId": DATASET_ID,
+                "tableId": "vgsales_external_table",
+            },
+            "externalDataConfiguration": {
+                "sourceFormat": "CSV",
+                "sourceUris": [f"gs://{BUCKET_NAME}/raw/vgsales.csv"],
+                "csvOptions": {"skipLeadingRows": 1},
+                "autodetect": True,
+            },
+        },
+        gcp_conn_id="google_cloud_default"
+    )
+
+    download_kaggle_data() >> upload_to_gcs >> create_external_table
