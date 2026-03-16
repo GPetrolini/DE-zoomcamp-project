@@ -4,6 +4,7 @@ from airflow.decorators import task
 from airflow.providers.google.cloud.operators.gcs import GCSCreateBucketOperator
 from airflow.providers.google.cloud.transfers.local_to_gcs import LocalFilesystemToGCSOperator
 from airflow.providers.google.cloud.operators.bigquery import BigQueryCreateExternalTableOperator
+from airflow.providers.google.cloud.transfers.gcs_to_bigquery import GCSToBigQueryOperator
 import pendulum
 
 KAGGLE_DATASET = "gregorut/videogamesales"
@@ -63,5 +64,17 @@ with DAG(
         },
         gcp_conn_id="google_cloud_default"
     )
+    load_to_bq_native = GCSToBigQueryOperator(
+        task_id="load_to_bq_native",
+        bucket=BUCKET_NAME,
+        source_objects=["raw/vgsales.csv"],
+        destination_project_dataset_table=f"{PROJECT_ID}.{DATASET_ID}.vgsales_native_table",
+        source_format="CSV",
+        skip_leading_rows=1,
+        write_disposition="WRITE_TRUNCATE",
+        autodetect=True,
+        gcp_conn_id="google_cloud_default"
+    )
+    
 
-    download_kaggle_data() >> upload_to_gcs >> create_external_table
+download_kaggle_data() >> upload_to_gcs >> create_external_table >> load_to_bq_native
