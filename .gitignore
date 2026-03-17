@@ -21,3 +21,9 @@ EOF
 orchestration/logs/
 orchestration/airflow_db/
 orchestration/plugins/
+
+
+dbt/logs/
+dbt/video_games_transform/logs/
+dbt/video_games_transform/target/
+dbt/video_games_transform/dbt_packages/
