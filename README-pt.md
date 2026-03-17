@@ -109,7 +109,7 @@ Credencias da API do Kaggle (```kaggle.json```)
 # 1. Configuração do Repositório e Crendencias
 Clone o repositório para a sua máquina local:
 ```
-git clone [https://github.com/GPetrolini/DE-zoomcamp-project.git](https://github.com/GPetrolini/DE-zoomcamp-project.git)
+git clone [git clone https://github.com/GPetrolini/video-games-data-pipeline.git](git clone https://github.com/GPetrolini/video-games-data-pipeline.git)
 cd DE-zoomcamp-project
 ```
 ## Credencias do GCP

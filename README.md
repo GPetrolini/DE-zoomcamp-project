@@ -106,7 +106,7 @@ Follow the steps below to recreate this infrastructure in your own environment.
 # 1. Repository and Credentials Setup
 Clone the repository to your local machine:
 ```
-git clone [https://github.com/GPetrolini/DE-zoomcamp-project.git](https://github.com/GPetrolini/DE-zoomcamp-project.git)
+git clone [git clone https://github.com/GPetrolini/video-games-data-pipeline.git](git clone https://github.com/GPetrolini/video-games-data-pipeline.git)
 cd DE-zoomcamp-project
 ```
 ## GCP Credentials:
